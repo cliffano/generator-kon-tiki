@@ -1,0 +1,9 @@
+{
+  "name": "{{project_id}}",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "ae86": "^3.0.0"
+  }
+}

@@ -1,0 +1,21 @@
+version: 0.2
+
+env:
+  parameter-store:
+    GITHUB_TOKEN: "/kon-tiki/github-token"
+    GH_TOKEN: "/kon-tiki/github-token"
+
+phases:
+  install:
+    commands:
+      - cd {{project_id}}
+      - make clean
+  pre_build:
+    commands:
+      - make deps init
+  build:
+    commands:
+      - make build
+  post_build:
+    commands:
+      - make deploy

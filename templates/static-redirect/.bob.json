@@ -1,0 +1,6 @@
+{
+  "deploy": "clean site",
+  "site": {
+    "type": "ae86"
+  }
+}
