@@ -3,7 +3,7 @@ ifndef GITHUB_TOKEN
     $(error Please specify GITHUB_TOKEN)
 endif
 # GH_TOKEN is used for gh within GitHub Actions https://cli.github.com/manual/gh_auth_login
-GH_TOKEN=GITHUB_TOKEN
+GH_TOKEN=${GITHUB_TOKEN}
 
 ################################################################
 # KnutHaugland: Makefile for building Kon-Tiki sites
@@ -11,7 +11,7 @@ GH_TOKEN=GITHUB_TOKEN
 ################################################################
 
 # KnutHaugland's version number
-KNUT_HAUGLAND_VERSION = 0.10.1-pre.0
+KNUT_HAUGLAND_VERSION = 1.2.0
 
 ################################################################
 # User configuration variables
@@ -42,7 +42,7 @@ export AWS_DEFAULT_REGION=${AWS_REGION}
 # Base targets
 
 # CI target to be executed by CI/CD tool
-ci: clean deps build infra-init
+ci: clean deps lint build infra-init
 
 # All target involves creating infra from scratch and then deploy the site
 all: clean deps infra-init infra-destroy infra-apply build deploy
@@ -56,13 +56,25 @@ clean:
 	bob clean
 	rm -rf .terraform/ .terraform.lock.hcl stage/
 
-# Retrieve the Pyhon package dependencies
+# Retrieve Studio customisation of Terraform Kon-Tiki
+# and node package dependencies
 deps: stage
-	cd stage && git clone "https://x-access-token:$(GITHUB_TOKEN)@github.com/cliffano/terraform-kon-tiki-studio.git"
+	cd stage && rm -rf terraform-kon-tiki-studio && gh repo clone cliffano/terraform-kon-tiki-studio
 	bob dep
 
-# Update Makefile to the latest version on origin's main branch
-update-to-latest:
+lint:
+	find data/ -type f -name "*.json" | while IFS= read -r file; do echo "> $$file"; python3 -m json.tool "$$file"; done
+
+# Placeholder for now - needed by checkmake
+test:
+	echo "PLACEHOLDER test target"
+
+# Update Makefile to the latest version tag
+update-to-latest: TARGET_KNUT_HAUGLAND_VERSION = $(shell curl -s https://api.github.com/repos/cliffano/knut-haugland/tags | jq -r '.[0].name')
+update-to-latest: update-to-version
+
+# Update Makefile to the main branch
+update-to-main:
 	curl https://raw.githubusercontent.com/cliffano/knut-haugland/main/src/Makefile-knut-haugland -o Makefile
 
 # Update Makefile to the version defined in TARGET_KNUT_HAUGLAND_VERSION parameter
@@ -77,6 +89,12 @@ build:
 
 deploy:
 	aws s3 cp --recursive --region $(AWS_REGION) .bob/site/ae86/ s3://$(BUCKET_NAME)
+
+x-build:
+	make -f Makefile-extras x-build
+
+x-deploy:
+	make -f Makefile-extras x-deploy AWS_REGION=$(AWS_REGION) BUCKET_NAME=$(BUCKET_NAME)
 
 ################################################################
 # Publishing targets
@@ -107,4 +125,4 @@ infra-import:
 
 ################################################################
 
-.PHONY: test ci all stage clean deps update-to-latest update-to-version build deploy publish infra-init infra-destroy infra-refresh infra-plan infra-apply infra-import
+.PHONY: ci all stage clean deps lint test update-to-latest update-to-main update-to-version build deploy x-build x-deploy publish infra-init infra-destroy infra-refresh infra-plan infra-apply infra-import
