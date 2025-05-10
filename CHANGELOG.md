@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade Knut Haugland to 1.2.0
 - Upgrade release-action to 1.1.0
 - Upgrade command-docker-action to 1.3.0
+- Switch CI action image to kon-tiki
 
 ## 0.10.0 - 2024-08-18
 ### Added
