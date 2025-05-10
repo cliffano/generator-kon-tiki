@@ -17,3 +17,6 @@ jobs:
           image: cliffano/kon-tiki
           shell: bash
           env_file: '/tmp/.env'
+          # based on https://github.com/cliffano/packer-kon-tiki/blob/main/provisioners/shell/info-post.sh#L5C13-L5C80
+          # TODO: replace /root with kon-tiki-user's home when available
+          extra_path: '/root/.local/bin:/root/go/bin:/usr/local/go/bin:/usr/local/node/bin'
