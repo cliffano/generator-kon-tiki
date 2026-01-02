@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Switch cliffano/terraform-kon-tiki-studio to kontiki818/terraform-studio-kon-tiki
+- Update badges to kontiki818 org
+
 ## 0.11.0 - 2025-05-10
 ### Changed
 - Upgrade Knut Haugland to 1.2.0

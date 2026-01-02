@@ -1,7 +1,7 @@
 <img align="right" src="https://raw.github.com/cliffano/generator-kon-tiki/main/avatar.jpg" alt="Avatar"/>
 
-[![Build Status](https://github.com/cliffano/generator-kon-tiki/workflows/CI/badge.svg)](https://github.com/cliffano/generator-kon-tiki/actions?query=workflow%3ACI)
-[![Security Status](https://snyk.io/test/github/cliffano/generator-kon-tiki/badge.svg)](https://snyk.io/test/github/cliffano/generator-kon-tiki)
+[![Build Status](https://github.com/kontiki818/generator-kon-tiki/workflows/CI/badge.svg)](https://github.com/kontiki818/generator-kon-tiki/actions?query=workflow%3ACI)
+[![Security Status](https://snyk.io/test/github/kontiki818/generator-kon-tiki/badge.svg)](https://snyk.io/test/github/kontiki818/generator-kon-tiki)
 
 Generator-Kon-Tiki
 ------------------
@@ -15,7 +15,7 @@ It provides the following components:
 | static-redirect | Generate a redirect Kon-Tiki static web site project. |
 | static-content | Generate a Kon-Tiki static web site project. |
 
-All components are built using [Knut Haugland](https://github.com/cliffano/knut-haugland).
+All components are built using [Knut Haugland](https://github.com/kontiki818/knut-haugland).
 
 Usage
 -----
@@ -55,4 +55,4 @@ Colophon
 
 Related Projects:
 
-* [Knut Haugland](https://github.com/cliffano/knut-haugland) - Makefile for creating Kon-Tiki static web sites
+* [Knut Haugland](https://github.com/kontiki818/knut-haugland) - Makefile for creating Kon-Tiki static web sites
