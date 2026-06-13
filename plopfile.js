@@ -67,6 +67,7 @@ export default function (plop) {
           templateFiles: [
             'templates/static-redirect/.*/*/*/*',
             'templates/static-redirect/.*/*/*',
+            'templates/static-redirect/.*/*',
             'templates/static-redirect/**/.*',
             'templates/static-redirect/**/*'
           ]
@@ -120,6 +121,7 @@ export default function (plop) {
         templateFiles: [
           'templates/static-content/.*/*/*/*',
           'templates/static-content/.*/*/*',
+          'templates/static-content/.*/*',
           'templates/static-content/**/.*',
           'templates/static-content/**/*'
         ]
