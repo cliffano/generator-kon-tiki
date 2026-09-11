@@ -1,5 +1,5 @@
 <!-- BEGIN:AVATAR -->
-<img align="right" src="https://raw.github.com/cliffano/generator-kon-tiki/main/avatar.jpg" alt="Avatar"/>
+![Avatar](avatar.jpg)
 <!-- END:AVATAR -->
 
 <!-- BEGIN:BADGES -->
@@ -56,6 +56,19 @@ Move to the generated project directory:
 
 ```shell
 cd stage/<component>/
+```
+
+## Usage With Config File
+
+Each component also has a `-with-config` target that skips the interactive prompts by reading the inputs from a Knut Haugland YAML config file. See [examples/](examples/) for sample config files for each component.
+
+Pass the config file path via the `GENERATOR_CONFIG` variable, it defaults to `knut-haugland.yml`:
+
+```shell
+make generate-static-content-with-config GENERATOR_CONFIG=path/to/knut-haugland.yml
+make generate-static-content-partials-with-config GENERATOR_CONFIG=path/to/knut-haugland.yml
+make generate-static-redirect-with-config GENERATOR_CONFIG=path/to/knut-haugland.yml
+make generate-static-redirect-partials-with-config GENERATOR_CONFIG=path/to/knut-haugland.yml
 ```
 
 ## Colophon

@@ -1,0 +1,14 @@
+---
+generator:
+  component: static-redirect
+  inputs:
+    project_id: static-redirect
+    project_name: Static Redirect
+    project_desc: Kon-Tiki web site static redirect
+    author_name: Pakkun
+    author_email: pakkunbot@users.noreply.github.com
+    author_url: https://github.com/pakkunbot
+    github_id: pakkunbot
+    github_repo: static-redirect
+    github_token_prefix: STUDIO
+    redirect_url: https://www.britannica.com/topic/Kon-Tiki-raft

@@ -3,6 +3,36 @@ ci: clean stage deps test-static-content test-static-content-partials test-stati
 clean:
 	rm -rf stage/
 
+stage:
+	mkdir -p stage/
+
+deps:
+	npm install .
+
+########################################
+# Utility targets
+########################################
+
+GENERATOR_CONFIG ?= knut-haugland.yml
+
+define set_generator_vars
+$(1): GENERATOR_COMPONENT = $$(shell yq .generator.component $(2))
+$(1): GENERATOR_INPUTS_PROJECT_ID = $$(shell yq .generator.inputs.project_id $(2))
+$(1): GENERATOR_INPUTS_PROJECT_NAME = $$(shell yq .generator.inputs.project_name $(2))
+$(1): GENERATOR_INPUTS_PROJECT_DESC = $$(shell yq .generator.inputs.project_desc $(2))
+$(1): GENERATOR_INPUTS_AUTHOR_NAME = $$(shell yq .generator.inputs.author_name $(2))
+$(1): GENERATOR_INPUTS_AUTHOR_EMAIL = $$(shell yq .generator.inputs.author_email $(2))
+$(1): GENERATOR_INPUTS_AUTHOR_URL = $$(shell yq .generator.inputs.author_url $(2))
+$(1): GENERATOR_INPUTS_GITHUB_ID = $$(shell yq .generator.inputs.github_id $(2))
+$(1): GENERATOR_INPUTS_GITHUB_REPO = $$(shell yq .generator.inputs.github_repo $(2))
+$(1): GENERATOR_INPUTS_GITHUB_TOKEN_PREFIX = $$(shell yq .generator.inputs.github_token_prefix $(2))
+endef
+
+# static-redirect also takes a redirect_url input on top of the standard set
+define set_generator_redirect_url_var
+$(1): GENERATOR_INPUTS_REDIRECT_URL = $$(shell yq .generator.inputs.redirect_url $(2))
+endef
+
 ########################################
 # static-content targets
 ########################################
@@ -10,26 +40,24 @@ clean:
 clean-static-content:
 	rm -rf stage/static-content/
 
-stage:
-	mkdir -p stage/
-
-deps:
-	npm install .
-
 generate-static-content: clean-static-content
 	node_modules/.bin/plop static-content
 
-test-static-content:
-	node_modules/.bin/plop static-content -- \
-	  --project_id "static-content" \
-		--project_name "Static Content" \
-		--project_desc "Kon-Tiki web site static content" \
-		--author_name "Pakkun" \
-		--author_email "pakkunbot@users.noreply.github.com" \
-		--author_url "https://github.com/pakkunbot" \
-		--github_id "pakkunbot" \
-		--github_repo "static-content" \
-		--github_token_prefix "STUDIO"
+$(eval $(call set_generator_vars,generate-static-content-with-config,$(GENERATOR_CONFIG)))
+generate-static-content-with-config: clean-static-content
+	node_modules/.bin/plop $(GENERATOR_COMPONENT) -- \
+	    --project_id "$(GENERATOR_INPUTS_PROJECT_ID)" \
+		--project_name "$(GENERATOR_INPUTS_PROJECT_NAME)" \
+		--project_desc "$(GENERATOR_INPUTS_PROJECT_DESC)" \
+		--author_name "$(GENERATOR_INPUTS_AUTHOR_NAME)" \
+		--author_email "$(GENERATOR_INPUTS_AUTHOR_EMAIL)" \
+		--author_url "$(GENERATOR_INPUTS_AUTHOR_URL)" \
+		--github_id "$(GENERATOR_INPUTS_GITHUB_ID)" \
+		--github_repo "$(GENERATOR_INPUTS_GITHUB_REPO)" \
+		--github_token_prefix "$(GENERATOR_INPUTS_GITHUB_TOKEN_PREFIX)"
+
+test-static-content: clean-static-content
+	make generate-static-content-with-config GENERATOR_CONFIG=examples/knut-haugland-static-content.yml
 	cd stage/static-content/ && \
 	  make ci
 
@@ -43,17 +71,21 @@ clean-static-content-partials:
 generate-static-content-partials: clean-static-content-partials
 	node_modules/.bin/plop static-content-partials
 
-test-static-content-partials:
-	node_modules/.bin/plop static-content-partials -- \
-	  --project_id "staticcontent" \
-		--project_name "StaticContent" \
-		--project_desc "A sample static website" \
-		--author_name "Pakkun" \
-		--author_email "pakkunbot@users.noreply.github.com" \
-		--author_url "https://github.com/pakkunbot" \
-		--github_id "pakkunbot" \
-		--github_repo "static-content" \
-		--github_token_prefix "STUDIO"
+$(eval $(call set_generator_vars,generate-static-content-partials-with-config,$(GENERATOR_CONFIG)))
+generate-static-content-partials-with-config: clean-static-content-partials
+	node_modules/.bin/plop $(GENERATOR_COMPONENT) -- \
+	    --project_id "$(GENERATOR_INPUTS_PROJECT_ID)" \
+		--project_name "$(GENERATOR_INPUTS_PROJECT_NAME)" \
+		--project_desc "$(GENERATOR_INPUTS_PROJECT_DESC)" \
+		--author_name "$(GENERATOR_INPUTS_AUTHOR_NAME)" \
+		--author_email "$(GENERATOR_INPUTS_AUTHOR_EMAIL)" \
+		--author_url "$(GENERATOR_INPUTS_AUTHOR_URL)" \
+		--github_id "$(GENERATOR_INPUTS_GITHUB_ID)" \
+		--github_repo "$(GENERATOR_INPUTS_GITHUB_REPO)" \
+		--github_token_prefix "$(GENERATOR_INPUTS_GITHUB_TOKEN_PREFIX)"
+
+test-static-content-partials: clean-static-content-partials
+	make generate-static-content-partials-with-config GENERATOR_CONFIG=examples/knut-haugland-static-content-partials.yml
 
 ########################################
 # static-redirect targets
@@ -65,18 +97,23 @@ clean-static-redirect:
 generate-static-redirect: clean-static-redirect
 	node_modules/.bin/plop static-redirect
 
-test-static-redirect:
-	node_modules/.bin/plop static-redirect -- \
-	  --project_id "static-redirect" \
-		--project_name "Static Redirect" \
-		--project_desc "Kon-Tiki web site static redirect" \
-		--author_name "Pakkun" \
-		--author_email "pakkunbot@users.noreply.github.com" \
-		--author_url "https://github.com/pakkunbot" \
-		--github_id "pakkunbot" \
-		--github_repo "static-redirect" \
-		--github_token_prefix "STUDIO" \
-		--redirect_url "https://www.britannica.com/topic/Kon-Tiki-raft"
+$(eval $(call set_generator_vars,generate-static-redirect-with-config,$(GENERATOR_CONFIG)))
+$(eval $(call set_generator_redirect_url_var,generate-static-redirect-with-config,$(GENERATOR_CONFIG)))
+generate-static-redirect-with-config: clean-static-redirect
+	node_modules/.bin/plop $(GENERATOR_COMPONENT) -- \
+	    --project_id "$(GENERATOR_INPUTS_PROJECT_ID)" \
+		--project_name "$(GENERATOR_INPUTS_PROJECT_NAME)" \
+		--project_desc "$(GENERATOR_INPUTS_PROJECT_DESC)" \
+		--author_name "$(GENERATOR_INPUTS_AUTHOR_NAME)" \
+		--author_email "$(GENERATOR_INPUTS_AUTHOR_EMAIL)" \
+		--author_url "$(GENERATOR_INPUTS_AUTHOR_URL)" \
+		--github_id "$(GENERATOR_INPUTS_GITHUB_ID)" \
+		--github_repo "$(GENERATOR_INPUTS_GITHUB_REPO)" \
+		--github_token_prefix "$(GENERATOR_INPUTS_GITHUB_TOKEN_PREFIX)" \
+		--redirect_url "$(GENERATOR_INPUTS_REDIRECT_URL)"
+
+test-static-redirect: clean-static-redirect
+	make generate-static-redirect-with-config GENERATOR_CONFIG=examples/knut-haugland-static-redirect.yml
 	cd stage/static-redirect/ && \
 	  make ci
 
@@ -90,20 +127,24 @@ clean-static-redirect-partials:
 generate-static-redirect-partials: clean-static-redirect-partials
 	node_modules/.bin/plop static-redirect-partials
 
-test-static-redirect-partials:
-	node_modules/.bin/plop static-redirect-partials -- \
-	  --project_id "staticredirect" \
-		--project_name "StaticRedirect" \
-		--project_desc "A sample static redirect" \
-		--author_name "Pakkun" \
-		--author_email "pakkunbot@users.noreply.github.com" \
-		--author_url "https://github.com/pakkunbot" \
-		--github_id "pakkunbot" \
-		--github_repo "static-redirect" \
-		--github_token_prefix "STUDIO"
+$(eval $(call set_generator_vars,generate-static-redirect-partials-with-config,$(GENERATOR_CONFIG)))
+generate-static-redirect-partials-with-config: clean-static-redirect-partials
+	node_modules/.bin/plop $(GENERATOR_COMPONENT) -- \
+	    --project_id "$(GENERATOR_INPUTS_PROJECT_ID)" \
+		--project_name "$(GENERATOR_INPUTS_PROJECT_NAME)" \
+		--project_desc "$(GENERATOR_INPUTS_PROJECT_DESC)" \
+		--author_name "$(GENERATOR_INPUTS_AUTHOR_NAME)" \
+		--author_email "$(GENERATOR_INPUTS_AUTHOR_EMAIL)" \
+		--author_url "$(GENERATOR_INPUTS_AUTHOR_URL)" \
+		--github_id "$(GENERATOR_INPUTS_GITHUB_ID)" \
+		--github_repo "$(GENERATOR_INPUTS_GITHUB_REPO)" \
+		--github_token_prefix "$(GENERATOR_INPUTS_GITHUB_TOKEN_PREFIX)"
+
+test-static-redirect-partials: clean-static-redirect-partials
+	make generate-static-redirect-partials-with-config GENERATOR_CONFIG=examples/knut-haugland-static-redirect-partials.yml
 
 update-knut-haugland-to-latest:
 	cd templates/static-content && make update-to-latest
 	cd templates/static-redirect && make update-to-latest
 
-.PHONY: ci clean clean-static-content clean-static-content-partials clean-static-redirect clean-static-redirect-partials stage deps generate-static-content test-static-content generate-static-content-partials test-static-content-partials generate-static-redirect test-static-redirect generate-static-redirect-partials test-static-redirect-partials update-knut-haugland-to-latest
+.PHONY: ci clean clean-static-content clean-static-content-partials clean-static-redirect clean-static-redirect-partials stage deps generate-static-content generate-static-content-with-config test-static-content generate-static-content-partials generate-static-content-partials-with-config test-static-content-partials generate-static-redirect generate-static-redirect-with-config test-static-redirect generate-static-redirect-partials generate-static-redirect-partials-with-config test-static-redirect-partials update-knut-haugland-to-latest

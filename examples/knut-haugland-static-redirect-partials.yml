@@ -1,0 +1,13 @@
+---
+generator:
+  component: static-redirect-partials
+  inputs:
+    project_id: staticredirect
+    project_name: StaticRedirect
+    project_desc: A sample static redirect
+    author_name: Pakkun
+    author_email: pakkunbot@users.noreply.github.com
+    author_url: https://github.com/pakkunbot
+    github_id: pakkunbot
+    github_repo: static-redirect
+    github_token_prefix: STUDIO

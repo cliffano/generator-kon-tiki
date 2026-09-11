@@ -109,4 +109,34 @@ export default function (plop) {
     ]
   });
 
+  plop.setGenerator('static-redirect-partials', {
+    description: 'Kon-Tiki Static Redirect partials template',
+    prompts: prompts,
+    actions: [
+      {
+        type: 'addMany',
+        destination: 'stage/static-redirect-partials',
+        templateFiles: [
+          'templates/static-redirect-partials/*'
+        ],
+        base: 'templates/static-redirect-partials'
+      }
+    ]
+  });
+
+  plop.setGenerator('static-content-partials', {
+    description: 'Kon-Tiki Static Content partials template',
+    prompts: prompts,
+    actions: [
+      {
+        type: 'addMany',
+        destination: 'stage/static-content-partials',
+        templateFiles: [
+          'templates/static-content-partials/*'
+        ],
+        base: 'templates/static-content-partials'
+      }
+    ]
+  });
+
 };
