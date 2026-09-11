@@ -5,13 +5,13 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: iamsauravsharma/create-dotenv@v2.0.1
         with:
           file-path: '/tmp/.env'
         env:
           GITHUB_TOKEN: ${{ secrets.KONTIKI818_GITHUB_TOKEN }}
-      - uses: cliffano/command-docker-action@v1.3.0
+      - uses: cliffano/command-docker-action@v2.0.0
         with:
           command: 'make ci'
           image: cliffano/kon-tiki
