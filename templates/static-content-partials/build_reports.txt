@@ -1,0 +1,3 @@
+Build reports:
+
+* [Infrastructure report](https://{{github_id}}.github.io/{{project_id}}/index.html)
